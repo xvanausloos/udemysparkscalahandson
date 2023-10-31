@@ -6,7 +6,7 @@ import org.apache.spark.SparkContext
 /*
 WordCount sorting using the cluster (improved version module 18)
  */
-object Module20 {
+class Module20 {
 
   def main(args: Array[String]): Unit = {
     Logger.getLogger("ldi").setLevel(Level.ERROR)
@@ -19,7 +19,7 @@ object Module20 {
     var wordsCount = lowerCaseWords.map( x => (x,1)).reduceByKey((x,y) => x + y)
 
     //flip (word, count) to (count, word) and sort by key
-    var wordsCountSorted = wordsCount.map(x => (x._2, x._1)).sortByKey()
+    var wordsCountSorted = wordsCount.map(x => (x._2, x._1))
     wordsCountSorted.collect().foreach(println)
 
   }
