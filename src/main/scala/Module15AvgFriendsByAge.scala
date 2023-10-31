@@ -29,8 +29,11 @@ object Module15AvgFriendsByAge {
     // adding together all the numFriends values and 1's respectively.
 
     // totalsByAge
-    val rddByage = rdd.mapValues(x => (x,1)).reduceByKey( (x,y) => (x._1+y._1,x._2 + y._2) )
-    rddByage.foreach(println)
+    val totalsByAge = rdd.mapValues(x => (x,1)).reduceByKey( (x,y) => (x._1+y._1,x._2 + y._2) )
+    totalsByAge.foreach(println)
+
+    val averageByAge = totalsByAge.mapValues(x => x._1 / x._2)
+    averageByAge.collect().sorted.foreach(println)
 
 
   }
