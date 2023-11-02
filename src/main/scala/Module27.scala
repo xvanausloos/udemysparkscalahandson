@@ -2,6 +2,7 @@ package com.ldi.spark
 
 import org.apache.log4j.{Level, Logger}
 import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.functions._
 
 import scala.Console.println
 
@@ -29,11 +30,14 @@ object Module27 {
       .csv("data/fakefriends.csv")
       .as[Friend]
 
-    friends.show(10)
+    //friends.show(10)
 
     val friendsFields = friends.select("age","friends")
-    val friendsByAge = friendsFields.groupBy("age").avg("friends")
-    val friendsByAgeSorted = friendsByAge.sort("age").show
+    //val friendsByAge = friendsFields.groupBy("age").agg(round(avg("friends")),2)
+
+    val friendsByAge = friendsFields.groupBy("age").agg( round( avg("friends"),2  )
+        .alias("avg friends")).sort("age").show()
+
 
     println("*** end ***")
 
