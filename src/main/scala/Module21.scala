@@ -13,7 +13,7 @@ object Module21 {
     val fields = line.split(",")
     var custid = fields(0)
     var amount = fields(2)
-    (fields(0).toInt, fields(2).toFloat) //return cust_id and amount
+    (fields(0).toInt, BigDecimal(fields(2)).setScale(2, BigDecimal.RoundingMode.HALF_UP)) //return cust_id and amount
   }
   def main(args: Array[String]): Unit = {
 
@@ -26,9 +26,16 @@ object Module21 {
 
     val totalByCustomer = mappedInput.reduceByKey( (x,y) => x + y  )
 
-    totalByCustomer.saveAsTextFile("module21.txt")
+    //flip field
+
+    val flipped = totalByCustomer.map( x=> (x._2, x._1))
+
+    val totalByCustomerOrdered = flipped.sortByKey()
+    totalByCustomerOrdered.collect().foreach(println)
+
+
 
     // Print the results.
-    println("ENDr")
+    println("END")
   }
 }
