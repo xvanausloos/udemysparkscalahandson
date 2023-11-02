@@ -28,7 +28,13 @@ object Module25 {
       .csv("data/fakefriends.csv")
       .as[Person]
 
-    schemaPeople.show(5)
+    schemaPeople.printSchema()
+
+    schemaPeople.createOrReplaceTempView("people")
+
+    val teenAgers = spark.sql("SELECT * FROM people WHERE age > 13 AND age <= 19")
+    val results = teenAgers.collect()
+    results.foreach(println)
   }
 
 }
