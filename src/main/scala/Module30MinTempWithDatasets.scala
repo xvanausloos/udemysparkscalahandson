@@ -6,8 +6,6 @@ import org.apache.log4j.{Level, Logger}
 import org.apache.spark.sql.{SparkSession, functions}
 import org.apache.spark.sql.types.{FloatType, IntegerType, StringType, StructType}
 
-import java.util.Date
-
 object Module30MinTempWithDatasets {
 
   case class Temperature(stationId: String, date: Int, measure_type: String, temperature: Float)
@@ -38,8 +36,6 @@ object Module30MinTempWithDatasets {
     val minTemps = ds.select("stationId", "temperature")
     val minTempsByStation = minTemps.groupBy("stationId").min("temperature")
     //minTempsByStation.show(minTempsByStation.count().toInt)
-
-
 
     val minTempsByStationF = minTempsByStation
       .withColumn("temperature",functions.round($"min(temperature)" * 0.1f * (9.0f / 5.0f) + 32.0f ,2))
