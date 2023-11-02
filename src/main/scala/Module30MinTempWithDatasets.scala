@@ -51,13 +51,9 @@ object Module30MinTempWithDatasets {
 
     for (result <- results){
       val station = result(0)
-      val temp = result(1)
-      val formattedTemp = f"$temp%2.f F."
+      val temp = result(1).asInstanceOf[Float]
+      val formattedTemp = f"$temp%.2f F."
       println(s"station $station min temp : $formattedTemp")
     }
-
-
-
   }
-
 }
