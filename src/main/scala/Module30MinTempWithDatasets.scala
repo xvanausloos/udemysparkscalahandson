@@ -1,7 +1,9 @@
 package com.ldi.spark
 
+
+
 import org.apache.log4j.{Level, Logger}
-import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.{SparkSession, functions}
 import org.apache.spark.sql.types.{FloatType, IntegerType, StringType, StructType}
 
 import java.util.Date
@@ -33,7 +35,27 @@ object Module30MinTempWithDatasets {
       .csv("data/1800.csv")
       .as[Temperature] //required import spark.implicits._
 
-    ds.show()
+    val minTemps = ds.select("stationId", "temperature")
+    val minTempsByStation = minTemps.groupBy("stationId").min("temperature")
+    //minTempsByStation.show(minTempsByStation.count().toInt)
+
+
+
+    val minTempsByStationF = minTempsByStation
+      .withColumn("temperature",functions.round($"min(temperature)" * 0.1f * (9.0f / 5.0f) + 32.0f ,2))
+      .select("stationId", "temperature").sort("temperature")
+
+    val results = minTempsByStationF.collect()
+
+    //minTempsByStationF.show()
+
+    for (result <- results){
+      val station = result(0)
+      val temp = result(1)
+      val formattedTemp = f"$temp%2.f F."
+      println(s"station $station min temp : $formattedTemp")
+    }
+
 
 
   }
