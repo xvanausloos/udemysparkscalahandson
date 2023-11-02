@@ -23,9 +23,10 @@ object Module25 {
     // load each line in a Dataset
     import spark.implicits._
     val schemaPeople = spark.read
-      .option("header","false")
+      .option("header","true")
       .option("inferSchema","true")
       .csv("data/fakefriends.csv")
+      .as[Person]
 
     schemaPeople.show(5)
   }
