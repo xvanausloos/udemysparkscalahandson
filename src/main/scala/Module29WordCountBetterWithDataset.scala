@@ -25,7 +25,12 @@ object Module29WordCountBetterWithDataset {
     //split words iusing reg exp
     val wordsSplit = input.select(explode(split($"value", "\\W+")).alias("word")).filter($"word" =!= "")
 
-    wordsSplit.select(lower($"word").alias("word lowercase")).show()
+    val lowerWords = wordsSplit.select(lower($"word").alias("word lowercase"))
+
+    val groupedWords = lowerWords.groupBy("word lowercase").count()
+
+    groupedWords.sort($"count".desc).show(groupedWords.count.toInt)
+
 
   }
 
