@@ -1,7 +1,9 @@
 package com.ldi.spark
 
+
 import org.apache.log4j.{Level, Logger}
-import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.{SparkSession, functions}
+import org.apache.spark.sql.functions._
 
 
 object Module29WordCountBetterWithDataset {
@@ -19,7 +21,12 @@ object Module29WordCountBetterWithDataset {
 
     import spark.implicits._
     val input = spark.read.text("data/book.txt").as[Book]
-    input.show()
+
+    //split words iusing reg exp
+    val wordsSplit = input.select(explode(split($"value", "\\W+")).alias("word")).filter($"word" =!= "")
+
+    wordsSplit.select(lower($"word").alias("word lowercase")).show()
+
   }
 
 }
