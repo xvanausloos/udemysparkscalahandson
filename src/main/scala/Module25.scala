@@ -26,7 +26,7 @@ object Module25 {
       .option("header","true")
       .option("inferSchema","true")
       .csv("data/fakefriends.csv")
-      .as[Person]
+      //.as[Person] //if we comment it we got a dataframe (schema is  inferred)
 
     schemaPeople.printSchema()
 
@@ -35,6 +35,8 @@ object Module25 {
     val teenAgers = spark.sql("SELECT * FROM people WHERE age > 13 AND age <= 19")
     val results = teenAgers.collect()
     results.foreach(println)
+
+    Thread.sleep(1000)
   }
 
 }
