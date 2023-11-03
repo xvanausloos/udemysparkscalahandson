@@ -2,6 +2,7 @@ package com.ldi.spark
 
 import org.apache.log4j.{Level, Logger}
 import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.functions.desc
 import org.apache.spark.sql.types.{IntegerType, LongType, StructType}
 
 object Module33MostPopularMovies {
@@ -24,15 +25,19 @@ object Module33MostPopularMovies {
       .add("timestamp", LongType, true)
 
     import spark.implicits._
+
     val movieDS = spark.read
       .option("headers","false")
       .option("sep", "\t")
-      .schema("moviesSchema")
+      .schema(moviesSchema)
       .csv("data/ml-100k/u.data")
       .as[Movie]
 
-    val topMovies = movieDS.groupBy("movieID").count()
-    topMovies.show(false)
+    val topMovies = movieDS.groupBy("movieID").count().sort(desc("count"))
+    topMovies.show(10)
+
+    spark.stop()
+
 
   }
 
