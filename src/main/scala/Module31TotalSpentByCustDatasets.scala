@@ -47,7 +47,7 @@ object Module31TotalSpentByCustDatasets {
 
    val datasorted = datagrouped.sort("total_spent")
 
-    datasorted.show()
+    datasorted.show(datasorted.count().toInt)
 
   }
 
