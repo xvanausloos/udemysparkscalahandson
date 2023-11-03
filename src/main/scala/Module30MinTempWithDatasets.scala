@@ -1,7 +1,5 @@
 package com.ldi.spark
 
-
-
 import org.apache.log4j.{Level, Logger}
 import org.apache.spark.sql.{SparkSession, functions}
 import org.apache.spark.sql.types.{FloatType, IntegerType, StringType, StructType}
@@ -10,7 +8,7 @@ object Module30MinTempWithDatasets {
 
   case class Temperature(stationId: String, date: Int, measure_type: String, temperature: Float)
   def main(args: Array[String]): Unit = {
-    Logger.getLogger("ldi").setLevel(Level.ERROR)
+    // Logger.getLogger("ldi").setLevel(Level.ERROR)
 
     val spark = SparkSession
       .builder
