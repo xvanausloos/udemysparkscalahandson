@@ -75,6 +75,12 @@ object Module34Broadcastvariables {
     val moviesWithNames = moviesCount.withColumn("movieTitle", lookupNameUDF(col("movieID")))
 
 
+    // sort the results
+    val sortedMoviesWithNames = moviesWithNames.sort("count")
+
+    // show all results
+    sortedMoviesWithNames.show(sortedMoviesWithNames.count().toInt, false)
+
 
     spark.stop()
 
