@@ -42,7 +42,7 @@ object Module34Broadcastvariables {
       .master("local[*]")
       .getOrCreate()
 
-    val nameDict = spark.sparkContext.broadcast(loadMovieNames())
+    val nameDict = spark.sparkContext.broadcast(loadMovieNames()) // send to each executor the little dataset with movie names/movie ids. improve perf when doing join
 
     val moviesSchema = new StructType()
       .add("userID", IntegerType, true)
@@ -74,6 +74,7 @@ object Module34Broadcastvariables {
     // add a movieTitle column using our new udf
     val moviesWithNames = moviesCount.withColumn("movieTitle", lookupNameUDF(col("movieID")))
 
+    moviesWithNames.show()
 
     // sort the results
     val sortedMoviesWithNames = moviesWithNames.sort("count")
@@ -82,11 +83,7 @@ object Module34Broadcastvariables {
     sortedMoviesWithNames.show(sortedMoviesWithNames.count().toInt, false)
 
 
-    spark.stop()
-
-
+    spark.stop() //important to spark Spark session between 2 tries ....=> it will avoid side effects :-)
   }
-
-
 
 }
